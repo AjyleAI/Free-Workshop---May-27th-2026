@@ -460,7 +460,7 @@ export default function App() {
           <h2 className="font-serif text-4xl md:text-6xl font-bold mb-8 leading-tight">The session is free.<br />The spot is yours.</h2>
           
           <p className="text-xl text-gray-700 mb-12 leading-relaxed">
-            No hidden agenda. Just a practical evening that could change how you think
+            No hard sell. Just a practical evening that could change how you think
             about your business, or your next move.
             <br className="hidden md:block" />
             <span className="font-medium text-page-text">Register below. You'll get everything you need straight to your inbox.</span>
