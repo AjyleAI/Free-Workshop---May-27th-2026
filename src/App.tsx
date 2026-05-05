@@ -81,7 +81,7 @@ function RegistrationForm({ onSuccess }: { onSuccess: () => void }) {
     setErrorStatus(null);
     
     try {
-      const response = await fetch("/api/subscribe", {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
