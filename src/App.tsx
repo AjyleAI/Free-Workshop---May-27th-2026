@@ -73,54 +73,79 @@ function RegistrationForm({ onSuccess }: { onSuccess: () => void }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
+  const [errorStatus, setErrorStatus] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorStatus(null);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ firstName, email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubmitting(false);
+        onSuccess();
+      } else {
+        setErrorStatus(data.error || "Something went wrong. Please try again.");
+        setIsSubmitting(false);
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      setErrorStatus("Failed to connect to server. Please try again later.");
       setIsSubmitting(false);
-      onSuccess();
-    }, 1200);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <label htmlFor="firstName" className="sr-only">First Name</label>
-          <input
-            id="firstName"
-            type="text"
-            required
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-page-text placeholder:text-gray-400"
-          />
+    <div className="w-full max-w-md">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1">
+            <label htmlFor="firstName" className="sr-only">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              required
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-page-text placeholder:text-gray-400"
+            />
+          </div>
+          <div className="flex-1">
+            <label htmlFor="email" className="sr-only">Email address</label>
+            <input
+              id="email"
+              type="email"
+              required
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-page-text placeholder:text-gray-400"
+            />
+          </div>
         </div>
-        <div className="flex-1">
-          <label htmlFor="email" className="sr-only">Email address</label>
-          <input
-            id="email"
-            type="email"
-            required
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-page-text placeholder:text-gray-400"
-          />
-        </div>
-      </div>
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full py-4 bg-accent text-white font-medium rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed text-lg"
-      >
-        {isSubmitting ? "Reserving..." : "Reserve My Free Spot"}
-      </button>
-    </form>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full py-4 bg-accent text-white font-medium rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed text-lg"
+        >
+          {isSubmitting ? "Reserving..." : "Reserve My Free Spot"}
+        </button>
+      </form>
+      {errorStatus && (
+        <p className="mt-4 text-sm text-red-600 font-medium">{errorStatus}</p>
+      )}
+    </div>
   );
 }
 
@@ -182,9 +207,17 @@ export default function App() {
                   className="bg-accent/5 border border-accent/10 p-8 rounded-2xl flex flex-col items-center text-center max-w-md w-full"
                 >
                   <CheckCircle2 className="w-12 h-12 text-accent mb-4" />
-                  <p className="text-xl font-medium text-page-text">
-                    You're in. Check your inbox for everything you need.
-                  </p>
+                  <div className="space-y-4 text-page-text">
+                    <p className="text-xl font-medium">Check your inbox now for everything you need to get started.</p>
+                    <div className="text-sm space-y-2 text-gray-600">
+                      <p className="font-bold text-page-text">Can't find my email?</p>
+                      <p>
+                        Please check your Spam or Junk folders. And to make sure you never miss an update, 
+                        add <span className="font-medium text-accent">aiworkshops@ajyle.ai</span> to your whitelist or "Safe Senders" list.
+                      </p>
+                    </div>
+                    <p className="text-lg font-serif italic serif-italic pt-2">See you on the inside!</p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -456,9 +489,17 @@ export default function App() {
                   className="bg-accent/5 border border-accent/10 p-8 rounded-2xl flex flex-col items-center text-center max-w-md w-full"
                 >
                   <CheckCircle2 className="w-12 h-12 text-accent mb-4" />
-                  <p className="text-xl font-medium text-page-text">
-                    You're in. Check your inbox for everything you need.
-                  </p>
+                  <div className="space-y-4 text-page-text">
+                    <p className="text-xl font-medium">Check your inbox now for everything you need to get started.</p>
+                    <div className="text-sm space-y-2 text-gray-600">
+                      <p className="font-bold text-page-text">Can't find my email?</p>
+                      <p>
+                        Please check your Spam or Junk folders. And to make sure you never miss an update, 
+                        add <span className="font-medium text-accent">aiworkshops@ajyle.ai</span> to your whitelist or "Safe Senders" list.
+                      </p>
+                    </div>
+                    <p className="text-lg font-serif italic serif-italic pt-2">See you on the inside!</p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
