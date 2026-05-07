@@ -361,7 +361,7 @@ export default function App() {
                 desc: "Most of the risk isn't the AI lying. It's you not noticing when it has. You'll leave knowing how to spot it, check it, and review in a way that actually keeps you protected."
               },
               {
-                title: "What human review actually looks like, and why it doesn't nned to slow you down.",
+                title: "What human review actually looks like, and why it doesn't need to slow you down.",
                 desc: "Not a slow-down. A safeguard. You'll see how to stay legally and reputationally safe without turning AI work into a manual job."
               }
             ].map((item, idx) => (
