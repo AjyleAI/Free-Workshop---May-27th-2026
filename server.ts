@@ -17,7 +17,7 @@ async function startServer() {
   app.use(express.json());
 
   // Mailchimp API Route
-  app.post("/api/register", async (req, res) => {
+  app.post("/api/subscribe", async (req, res) => {
     const { firstName, email } = req.body;
 
     if (!firstName || !email) {
