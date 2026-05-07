@@ -81,7 +81,7 @@ function RegistrationForm({ onSuccess }: { onSuccess: () => void }) {
     setErrorStatus(null);
     
     try {
-      const response = await fetch("/api/subscribe", {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -355,6 +355,14 @@ export default function App() {
               {
                 title: "Where AI fits in your specific situation.",
                 desc: "Whether you've already got a business or you're building something from scratch. You won't leave with generic advice. You'll leave with a clear idea of your own next step."
+              },
+              {
+                title: "How to catch AI when it gets things wrong, and what to do next.",
+                desc: "Most of the risk isn't the AI lying. It's you not noticing when it has. You'll leave knowing how to spot it, check it, and review in a way that actually keeps you protected."
+              },
+              {
+                title: "What human review actually looks like, and why it doesn't nned to slow you down.",
+                desc: "Not a slow-down. A safeguard. You'll see how to stay legally and reputationally safe without turning AI work into a manual job."
               }
             ].map((item, idx) => (
               <div key={idx} className="space-y-4">
