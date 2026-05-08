@@ -5,7 +5,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { email, name } = req.body;
+  const { email, firstName } = req.body;
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
@@ -14,9 +14,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const API_KEY = process.env.MAILCHIMP_API_KEY!;
   const LIST_ID = process.env.MAILCHIMP_AUDIENCE_ID!;
   const DC = API_KEY.split("-")[1];
-
-  const firstName = name ? name.split(" ")[0] : "";
-  const lastName = name ? name.split(" ").slice(1).join(" ") : "";
 
   try {
     const response = await fetch(
@@ -30,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         body: JSON.stringify({
           email_address: email,
           status: "subscribed",
-          merge_fields: { FNAME: firstName, LNAME: lastName },
+          merge_fields: { FNAME: firstName || "", LNAME: "" },
         }),
       }
     );
