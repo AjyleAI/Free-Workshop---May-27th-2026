@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
+import type { RegistrationPayload, RegistrationResponse } from './types/registration';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle2, Clock } from 'lucide-react';
 
@@ -86,7 +87,7 @@ function RegistrationForm({ onSuccess }: { onSuccess: () => void }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ firstName, email }),
+        body: JSON.stringify({ firstName, email } satisfies RegistrationPayload),
       });
 
       const data = await response.json();
